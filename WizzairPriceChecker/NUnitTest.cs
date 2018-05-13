@@ -29,28 +29,32 @@ namespace WizzairPriceChecker
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
             //set Origin Airport
-            var UIOriginEdit = driver.FindElement(By.XPath("//input[@placeholder='Origin']"));
-            UIOriginEdit.Clear();
-            UIOriginEdit.SendKeys("Barcelona El Prat");
-
-            var locationContainerLabelOrigin = driver.FindElement(By.XPath("//label[@data-test='flight-search-panel-location-label']"));
-            locationContainerLabelOrigin.Click();
+            HomePage.SetOriginAirport(driver, "Barcelona El Prat");
 
             //set Destination Airport
-            var UIDestinationEdit = driver.FindElement(By.XPath("//input[@placeholder='Destination']"));
-            UIOriginEdit.Clear();
-            UIDestinationEdit.SendKeys("Vilnius");
-
-            var locationContainerLabelDestination = driver.FindElement(By.XPath("//label[@data-test='flight-search-panel-location-label']"));
-            locationContainerLabelDestination.Click();
+            HomePage.SetDestinationAirport(driver, "Vilnius");
 
             //set departure date
             var UIDepartureDate = driver.FindElement(By.XPath("//div[@id='search-departure-date']"));
             var departureDateDefaultText = DateTime.Today.AddDays(1).ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
             var departureActualText = new DateTime(2018, 7, 14).ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
             UIDepartureDate.Text.Replace(oldValue: departureDateDefaultText, newValue: departureActualText);
+            UIDepartureDate.SendKeys(Keys.Enter);
 
-            
+            //setnumber of passengers
+            var UIPassengersNumberEdit = driver.FindElement(By.XPath("//div[@id='search-passenger']"));
+            UIPassengersNumberEdit.Click();
+        
+            var adultNumberIncreaseButton = driver.FindElements(By.XPath("//button[@class='stepper__button stepper__button--add']")).First();
+            adultNumberIncreaseButton.Click();
+
+            //click Search button
+            var UISubmitButton = driver.FindElement(By.XPath("//button[@data-test='flight-search-submit']"));
+            UISubmitButton.Click();
+
+            //wait for page is loaded
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
         }
 
         [TearDown]
