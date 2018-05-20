@@ -25,21 +25,24 @@ namespace WizzairPriceChecker
         [Test]
         public void OpenAppTest()
         {
-            driver.Url = "http://www.wizzair.com";
+            string departureAirport = "BCN";
+            string arrivalAirport = "VNO";
+            
+            
+            DateTime departureDate = new DateTime(2018, 07, 14);
+            string departureDateString = departureDate.ToString("yyyy-MM-dd");
+            driver.Url = "https://wizzair.com/#/booking/select-flight/" + departureAirport + 
+                "/" + arrivalAirport + "/" + departureDateString;
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
-            //set Origin Airport
-            HomePage.SetOriginAirport(driver, "Barcelona El Prat");
+            ////set Origin Airport
+            //HomePage.SetOriginAirport(driver, "Barcelona El Prat");
 
-            //set Destination Airport
-            HomePage.SetDestinationAirport(driver, "Vilnius");
+            ////set Destination Airport
+            //HomePage.SetDestinationAirport(driver, "Vilnius");
 
             //set departure date
-            var UIDepartureDate = driver.FindElement(By.XPath("//div[@id='search-departure-date']"));
-            var departureDateDefaultText = DateTime.Today.AddDays(1).ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
-            var departureActualText = new DateTime(2018, 7, 14).ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
-            UIDepartureDate.Text.Replace(oldValue: departureDateDefaultText, newValue: departureActualText);
-            UIDepartureDate.SendKeys(Keys.Enter);
+            HomePage.SetDepartureDate(driver, departureDate);
 
             //setnumber of passengers
             var UIPassengersNumberEdit = driver.FindElement(By.XPath("//div[@id='search-passenger']"));
